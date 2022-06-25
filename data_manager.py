@@ -2,16 +2,17 @@ import requests
 from requests import request
 import os
 
-SHEETY_API = os.environ["SHEETY_API_ENDPOINT"]
+
 
 class DataManager:
     # This class is responsible for talking to the Google Sheet.
     def __init__(self):
+        self.api_endpoint = os.environ["SHEETY_API_ENDPOINT"]
         self.flight_deal_data = {}
 
 
     def get_all_date(self):
-        response = requests.get(url=SHEETY_API)
+        response = requests.get(url=self.api_endpoint)
         self.flight_deal_data = response.json()["prices"]
         return self.flight_deal_data
 
@@ -25,7 +26,7 @@ class DataManager:
                     "iataCode": flight["iataCode"]
             }
             }
-            response = requests.put(url=f"{SHEETY_API}/{flight['id']}", json=params)
+            response = requests.put(url=f"{self.api_endpoint}/{flight['id']}", json=params)
             print(response.text)
 
 
